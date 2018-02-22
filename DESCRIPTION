@@ -1,4 +1,4 @@
-Package: MEPSutils
+Package: mepsr
 Title: Utilities for MEPS data
 Version: 0.0.0.9000
 Authors@R: person("Andrew", "Singleton", email = "andrewts@met.no", 
