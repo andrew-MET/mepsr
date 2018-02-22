@@ -14,6 +14,7 @@
 #'   ascertain the format from the file name, but if it can't \code{file_type}
 #'   must be passed as an argument.
 #' @param lead_time The lead time to read.
+#' @param ... Arguments to be passed to \code{read_netcf} or \code{read_grib}
 #'
 #' @return A list containing: \cr
 #' \code{\strong{model_data}}: The 3d field (the 3rd dimension is time). \cr
@@ -30,7 +31,13 @@
 #' model_field <- read_members(file_path, file_name, 9, "precipitation_amount_acc", lead_time = 24)
 #' model_field <- read_members(file_path, file_name, 9, "Pcp", lead_time = 24)
 
-read_members <- function(filepath, filename, num_perturbed_members, parameter, file_type = NULL, lead_time = NULL)  {
+read_members <- function(filepath,
+                         filename,
+                         num_perturbed_members,
+                         parameter,
+                         file_type = NULL,
+                         lead_time = NULL,
+                         ...)  {
 #
 # read control and get domain info
 #
@@ -96,7 +103,7 @@ read_members <- function(filepath, filename, num_perturbed_members, parameter, f
 			num_perturbed_members <- num_members - 1
 		}
 		data_all        <- array(NA, c(length(x), length(y), num_perturbed_members + 1))
-		data_all[, , 1] <- read_netcdf(model_file, parameter, 0, lead_time)
+		data_all[, , 1] <- read_netcdf(model_file, parameter, 0, lead_time, ...)
 #
 	} else {
 		stop("Unknown file type ", file_type, ". Can only deal with netcdf or grib",
@@ -114,16 +121,32 @@ read_members <- function(filepath, filename, num_perturbed_members, parameter, f
 			model_file               <- file.path(filepath, member_name, filename)
   		data_all[, , member + 1] <- read_grib(model_file, parameter)
   	} else if (file_type == "netcdf") {
-  		data_all[, , member + 1] <- read_netcdf(model_file, parameter, member, lead_time)
+  		data_all[, , member + 1] <- read_netcdf(model_file, parameter, member, lead_time, ...)
   	}
 	}
 	cat("\n")
 #
-	if ((parameter == "t2m" | parameter == "sst") & min(data_all, na.rm = TRUE) > 200) {
+# Convert units - it is assumed that when geopotential is requested, geopential
+# height is what is wanted
+
+	is_temperature <- function(x) {
+	  x %in% c("t", "t2m", "sst") | stringr::str_detect(x, "temperature")
+	}
+	is_pressure <- function(x) {
+	  x == "pmsl" | stringr::str_detect(x, "pressure")
+	}
+	is_geopotential <- function(x) {
+	  x %in% c("z0m", "z") | stringr::str_detect(x, "geopotential")
+	}
+
+	if (is_temperature(parameter) & min(data_all, na.rm = TRUE) > 200) {
 		data_all <- data_all - 273.15
 	}
-	if (parameter == "pmsl" & min(data_all, na.rm = TRUE) > 2000) {
+	if (is_pressure(parameter) & min(data_all, na.rm = TRUE) > 2000) {
 		data_all <- data_all/100
+	}
+	if (is_geopotential(parameter)) {
+		data_all <- data_all/9.80665
 	}
 
 #

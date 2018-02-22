@@ -4,7 +4,7 @@
 \alias{read_netcdf}
 \title{Read a 2d field from NetCDF file.}
 \usage{
-read_netcdf(filename, parameter, member, lead_time)
+read_netcdf(filename, parameter, member, lead_time, level = NULL)
 }
 \arguments{
 \item{filename}{NetCDF file name to read from.}
@@ -15,6 +15,8 @@ or a standard HARP parameter name.}
 \item{member}{The member to read from the file.}
 
 \item{lead_time}{The lead time to read from the file.}
+
+\item{level}{The pressure level for the data}
 }
 \value{
 A 2-d array.
@@ -22,7 +24,7 @@ A 2-d array.
 \description{
 \code{read_netcdf} returns a 2d field from a NetCDF file for a given
 member and lead time. This function has only been tested on MEPS data.
-A level argument needs to be added.
+The levels argument will currently only get data on pressure levels.
 }
 \examples{
 file_name <- "/lustre/storeB/immutable/archive/projects/metproduction/MEPS/2018/01/01/meps_extracted_2_5km_20180101T00Z.nc"

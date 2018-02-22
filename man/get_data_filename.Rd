@@ -20,13 +20,15 @@ implemented.}
 \item{experiment_name}{The experiment name.}
 
 \item{parameter}{If the parameter is in a surfex file, for example, it must
-be given so that the correct file is found.}
+be given so that the correct file is found. Otherwise an extracted file is
+assumed.}
 
 \item{lead_time}{The lead time must be given in hours for experiments.}
 }
 \value{
-A list containting \code{\strong{filepath}}, the path to the data
-  file and \code{\strong{filename}}, the name of the file.
+A list containting \code{\strong{fullpath}}, the full path to the
+  file, \code{\strong{filepath}}, the path to the data file and
+  \code{\strong{filename}}, the name of the file.
 }
 \description{
 Works for Operational MEPS. For experments, the experiment directory is

@@ -12,7 +12,8 @@
 #'   implemented.
 #' @param experiment_name The experiment name.
 #' @param parameter If the parameter is in a surfex file, for example, it must
-#'   be given so that the correct file is found.
+#'   be given so that the correct file is found. Otherwise an extracted file is
+#'   assumed.
 #' @param lead_time The lead time must be given in hours for experiments.
 #'
 #' @return A list containting \code{\strong{fullpath}}, the full path to the

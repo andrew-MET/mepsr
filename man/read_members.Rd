@@ -5,7 +5,7 @@
 \title{Read ensemble members from a forecast file}
 \usage{
 read_members(filepath, filename, num_perturbed_members, parameter,
-  file_type = NULL, lead_time = NULL)
+  file_type = NULL, lead_time = NULL, ...)
 }
 \arguments{
 \item{filepath}{The path to the forecast file.}
@@ -22,6 +22,8 @@ ascertain the format from the file name, but if it can't \code{file_type}
 must be passed as an argument.}
 
 \item{lead_time}{The lead time to read.}
+
+\item{...}{Arguments to be passed to \code{read_netcf} or \code{read_grib}}
 }
 \value{
 A list containing: \cr
