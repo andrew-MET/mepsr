@@ -15,4 +15,7 @@ Imports: ncdf4,
     tools,
     stringr,
     lubridate,
-    magrittr
+    magrittr,
+    fields,
+    raster,
+    sp

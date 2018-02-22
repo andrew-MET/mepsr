@@ -17,7 +17,7 @@
 #' @param ... Arguments to be passed to \code{read_netcf} or \code{read_grib}
 #'
 #' @return A list containing: \cr
-#' \code{\strong{model_data}}: The 3d field (the 3rd dimension is time). \cr
+#' \code{\strong{model_data}}: The 3d field (the 3rd dimension is ensemble member). \cr
 #' \code{\strong{x}}: The x coordinates in the projection of the forecast file. \cr
 #' \code{\strong{y}}: The y coordinates in the projection of the forecast file. \cr
 #' \code{\strong{proj4_string}}: The proj4 projection string for the forecast file. \cr
@@ -130,13 +130,13 @@ read_members <- function(filepath,
 # height is what is wanted
 
 	is_temperature <- function(x) {
-	  x %in% c("t", "t2m", "sst") | stringr::str_detect(x, "temperature")
+	  tolower(x) %in% c("t", "t2m", "sst") | stringr::str_detect(x, "temperature")
 	}
 	is_pressure <- function(x) {
-	  x == "pmsl" | stringr::str_detect(x, "pressure")
+	  tolower(x) == "pmsl" | stringr::str_detect(x, "pressure")
 	}
 	is_geopotential <- function(x) {
-	  x %in% c("z0m", "z") | stringr::str_detect(x, "geopotential")
+	  tolower(x) %in% c("z0m", "z") | stringr::str_detect(x, "geopotential")
 	}
 
 	if (is_temperature(parameter) & min(data_all, na.rm = TRUE) > 200) {

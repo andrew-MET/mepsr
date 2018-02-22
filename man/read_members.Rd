@@ -27,7 +27,7 @@ must be passed as an argument.}
 }
 \value{
 A list containing: \cr
-\code{\strong{model_data}}: The 3d field (the 3rd dimension is time). \cr
+\code{\strong{model_data}}: The 3d field (the 3rd dimension is ensemble member). \cr
 \code{\strong{x}}: The x coordinates in the projection of the forecast file. \cr
 \code{\strong{y}}: The y coordinates in the projection of the forecast file. \cr
 \code{\strong{proj4_string}}: The proj4 projection string for the forecast file. \cr
