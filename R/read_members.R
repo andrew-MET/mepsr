@@ -5,7 +5,6 @@
 #' helper functions. It is assumed that grib files only contain one member and
 #' ntcdf files contain all members.
 #'
-#' @importFrom geogrid DomainExtent proj4.list2str
 #' @param filepath The path to the forecast file.
 #' @param filename The forecast file name.
 #' @param num_perturbed_members The number of perturbed members in the forecast.

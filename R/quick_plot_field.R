@@ -5,6 +5,7 @@
 #'
 #' @importFrom raster crop extent
 #' @importFrom sp spTransform plot
+#' @importFrom graphics lines
 #' @param eps_field Output of \code{read_members}.
 #' @param member Member to plot.
 #' @param hires_coast Plot a high resolution coastline - TRUE or FALSE. Defaults

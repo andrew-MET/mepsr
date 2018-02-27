@@ -1,12 +1,13 @@
 Package: mepsr
 Title: Utilities for MEPS data
-Version: 0.0.0.9004
+Version: 0.0.0.9005
 Authors@R: person("Andrew", "Singleton", email = "andrewts@met.no", 
   role = c("aut", "cre"))
 Description: Utilities for working with data including functions to find and 
     read MEPS files as well as some simple plotting routines.
 Depends:
-    R (>= 3.3.1)
+    R (>= 3.3.1),
+    Rgrib2 (>= 1.2.6)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -22,9 +23,7 @@ Imports:
     raster,
     sp,
     Rcpp,
-    RcppArmadillo,
-    Rgrib2,
-    geogrid
+    RcppArmadillo
 LinkingTo: 
     Rcpp,
     RcppArmadillo
