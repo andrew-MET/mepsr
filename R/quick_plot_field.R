@@ -31,8 +31,15 @@
 
 quick_plot_field <- function(eps_field, member, hires_coast = FALSE, ...) {
 
-  member_index <- which(eps_field$member == member)
-  if (length(member_index) == 0) stop("Member ", member, " not found")
+  if (is.numeric(member)) {
+    member_index <- which(eps_field$member == member)
+    if (length(member_index) == 0) stop("Member ", member, " not found")
+    plot_field <- eps_field$model_data[ , , member_index]
+  } else if (tolower(member %in% c("mean", "sd", "stddev", "std_dev"))) {
+    plot_field <- ens_mean_and_sd(eps_field$model_data)[[paste0("ens_", member)]]
+  } else {
+    stop("Unknown option: '", member, "' for member")
+  }
 
   x_range <- range(eps_field$x)
   y_range <- range(eps_field$y)
@@ -47,7 +54,7 @@ quick_plot_field <- function(eps_field, member, hires_coast = FALSE, ...) {
 
   fields::image.plot(eps_field$x,
                      eps_field$y,
-                     eps_field$model_data[, , member_index],
+                     plot_field,
                      asp  = 1,
                      xlab = "",
                      ylab = "",
@@ -56,7 +63,7 @@ quick_plot_field <- function(eps_field, member, hires_coast = FALSE, ...) {
                      bty  = "n",
                      ...)
   sp::plot(countries_polygon, add = TRUE)
-  lines(
+  graphics::lines(
     c(x_range[1], x_range[2], x_range[2], x_range[1], x_range[1]),
     c(y_range[1], y_range[1], y_range[2], y_range[2], y_range[1])
   )

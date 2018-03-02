@@ -117,6 +117,14 @@ get_grib_param_info <- function(param, level = NULL, levtype = 100) {
 				               param_number <-  34
 				               level_type   <-  105
 				               level_number <-  10},
+				 "u100m"   = {short_name   <-  "100u"
+				               param_number <-  246
+				               level_type   <-  1
+				               level_number <-  0},
+				 "v100m"   = {short_name   <-  "100v"
+				               param_number <-  247
+				               level_type   <-  1
+				               level_number <-  0},
 				 "u"        = {short_name   <-  "u"
 				               param_number <-  33
 				               level_type   <-  levtype
