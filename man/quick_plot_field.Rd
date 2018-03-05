@@ -4,12 +4,14 @@
 \alias{quick_plot_field}
 \title{Plot a field from an eps model}
 \usage{
-quick_plot_field(eps_field, member, hires_coast = FALSE, ...)
+quick_plot_field(eps_field, member, legend = TRUE, hires_coast = FALSE, ...)
 }
 \arguments{
 \item{eps_field}{Output of \code{read_members}.}
 
 \item{member}{Member to plot.}
+
+\item{legend}{Whether to plot a legend - TRUE or FALSE. Defaults to TRUE.}
 
 \item{hires_coast}{Plot a high resolution coastline - TRUE or FALSE. Defaults
 to FALSE.}

@@ -6,8 +6,10 @@
 #' @importFrom raster crop extent
 #' @importFrom sp spTransform plot
 #' @importFrom graphics lines
+#'
 #' @param eps_field Output of \code{read_members}.
 #' @param member Member to plot.
+#' @param legend Whether to plot a legend - TRUE or FALSE. Defaults to TRUE.
 #' @param hires_coast Plot a high resolution coastline - TRUE or FALSE. Defaults
 #'   to FALSE.
 #' @param ... Arguments for \code{image.plot}, e.g. for breaks and colour
@@ -29,7 +31,13 @@
 #' library(viridis)
 #' quick_plot_field(t2m, 0, hires = TRUE, col = viridis(256))
 
-quick_plot_field <- function(eps_field, member, hires_coast = FALSE, ...) {
+quick_plot_field <- function(
+  eps_field,
+  member,
+  legend = TRUE,
+  hires_coast = FALSE,
+  ...
+) {
 
   if (is.numeric(member)) {
     member_index <- which(eps_field$member == member)
@@ -51,17 +59,19 @@ quick_plot_field <- function(eps_field, member, hires_coast = FALSE, ...) {
   }
   countries_polygon <- raster::crop(countries_polygon, raster::extent(c(x_range, y_range)))
 
-
-  fields::image.plot(eps_field$x,
-                     eps_field$y,
-                     plot_field,
-                     asp  = 1,
-                     xlab = "",
-                     ylab = "",
-                     xaxt = "n",
-                     yaxt = "n",
-                     bty  = "n",
-                     ...)
+  plot_fun <- ifelse (legend, fields::image.plot, image)
+  plot_fun(
+    eps_field$x,
+    eps_field$y,
+    plot_field,
+    asp  = 1,
+    xlab = "",
+    ylab = "",
+    xaxt = "n",
+    yaxt = "n",
+    bty  = "n",
+    ...
+  )
   sp::plot(countries_polygon, add = TRUE)
   graphics::lines(
     c(x_range[1], x_range[2], x_range[2], x_range[1], x_range[1]),
