@@ -9,7 +9,7 @@ quick_plot_field(eps_field, member, legend = TRUE, hires_coast = FALSE, ...)
 \arguments{
 \item{eps_field}{Output of \code{read_members}.}
 
-\item{member}{Member to plot.}
+\item{member}{Member to plot. Can be numeric or one of "mean", "sd".}
 
 \item{legend}{Whether to plot a legend - TRUE or FALSE. Defaults to TRUE.}
 
