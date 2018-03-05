@@ -8,7 +8,7 @@
 #' @importFrom graphics lines
 #'
 #' @param eps_field Output of \code{read_members}.
-#' @param member Member to plot.
+#' @param member Member to plot. Can be numeric or one of "mean", "sd".
 #' @param legend Whether to plot a legend - TRUE or FALSE. Defaults to TRUE.
 #' @param hires_coast Plot a high resolution coastline - TRUE or FALSE. Defaults
 #'   to FALSE.
@@ -43,7 +43,7 @@ quick_plot_field <- function(
     member_index <- which(eps_field$member == member)
     if (length(member_index) == 0) stop("Member ", member, " not found")
     plot_field <- eps_field$model_data[ , , member_index]
-  } else if (tolower(member %in% c("mean", "sd", "stddev", "std_dev"))) {
+  } else if (tolower(member) %in% c("mean", "sd")) {
     plot_field <- ens_mean_and_sd(eps_field$model_data)[[paste0("ens_", member)]]
   } else {
     stop("Unknown option: '", member, "' for member")
