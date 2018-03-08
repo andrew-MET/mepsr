@@ -44,7 +44,9 @@ quick_plot_field <- function(
     if (length(member_index) == 0) stop("Member ", member, " not found")
     plot_field <- eps_field$model_data[ , , member_index]
   } else if (tolower(member) %in% c("mean", "sd")) {
-    plot_field <- ens_mean_and_sd(eps_field$model_data)[[paste0("ens_", member)]]
+    plot_field <- ens_mean_and_sd(
+      eps_field$model_data
+    )[[paste0("ens_", tolower(member))]]
   } else {
     stop("Unknown option: '", member, "' for member")
   }
