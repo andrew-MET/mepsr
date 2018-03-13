@@ -113,9 +113,8 @@ read_members <- function(filepath,
 #
 # Get perturbed members
 #
-	cat("Reading members ")
+	pb <- utils::txtProgressBar(min = 1, max = num_perturbed_members, initial = 1, style = 3)
 	for (member in 1:num_perturbed_members) {
-		cat(".")
   	member_name <- paste0("mbr", formatC(member, width = 3, flag = "0"))
   	if (file_type == "grib") {
 			model_file               <- file.path(filepath, member_name, filename)
@@ -123,8 +122,8 @@ read_members <- function(filepath,
   	} else if (file_type == "netcdf") {
   		data_all[, , member + 1] <- read_netcdf(model_file, parameter, member, lead_time, ...)
   	}
+  	utils::setTxtProgressBar(pb, member)
 	}
-	cat("\n")
 #
 # Convert units - it is assumed that when geopotential is requested, geopential
 # height is what is wanted

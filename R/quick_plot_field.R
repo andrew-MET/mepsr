@@ -36,6 +36,7 @@ quick_plot_field <- function(
   member,
   legend = TRUE,
   hires_coast = FALSE,
+  col = fields::tim.colors(),
   ...
 ) {
 
@@ -72,6 +73,7 @@ quick_plot_field <- function(
     xaxt = "n",
     yaxt = "n",
     bty  = "n",
+    col  = col,
     ...
   )
   sp::plot(countries_polygon, add = TRUE)
