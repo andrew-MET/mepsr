@@ -100,6 +100,10 @@ read_members <- function(model_files,
 	      geogrid::proj4.list2str(attr(geofield_data, "domain")$projection), collapse = " +"
       )
 	  )
+	  proj4_string <- proj4_string %>%
+	    stringr::str_replace_all(" = ", "=") %>%
+	    stringr::str_replace_all(" =", "=") %>%
+	    stringr::str_replace_all("= ", "=")
 	  members <- model_files %>%
 	    strsplit("/") %>%
 	    purrr::map(~ stringr::str_subset(., "mbr")) %>%

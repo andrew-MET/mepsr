@@ -2,7 +2,8 @@
 % Please edit documentation in R/get_data_filename.R
 \name{get_data_filename}
 \alias{get_data_filename}
-\title{Gets the filename of a forecast file}
+\title{Gets the filename of a forecast file from the date, cycle and lead time. A
+template can be passed as an argument.}
 \usage{
 get_data_filename(data_date, data_cycle, data_source = "operational meps",
   experiment_name = NULL, parameter = NULL, lead_time = NULL,
@@ -36,9 +37,9 @@ be \code{static_path/template}.}
 "harmoneps_grib", "harmoneps_grib_fp", "haramoneps_grib_sfx", and the same
 with "harmonie" in place of "harmoneps" for deterministic files. \cr
 Otherwise, a template can be given with substitutions expressed as
-${substitution}. Available substitutions are \code{${YYYY}}, ${MM}, ${DD}, ${HH},
-${LDTx}, ${MBRx}, where x is the number of charcters in the string with
-leading zeros added. YYYY = year (4 digits), MM = month (2 digits with
+${substitution}. Available substitutions are \code{${YYYY}}, ${MM}, ${DD},
+${HH}, ${LDTx}, ${MBRx}, where x is the number of charcters in the string
+with leading zeros added. YYYY = year (4 digits), MM = month (2 digits with
 leading zero if < 10), DD = day (2 digits with leading zero if < 10), HH =
 hour (2 digits with leading zero if < 10), LDT = lead time, MBR = ensemble
 member. ${static_path} and ${experiment_name} can also be used if
@@ -48,8 +49,8 @@ specified.}
 The full path(s) to the forecast file(s).
 }
 \description{
-Works for Operational MEPS. For experments, the experiment directory is
-currently hard coded. This needs fixing!
+Gets the filename of a forecast file from the date, cycle and lead time. A
+template can be passed as an argument.
 }
 \examples{
 get_data_filename(20180101, 0)
