@@ -5,7 +5,8 @@
 \title{Gets the filename of a forecast file}
 \usage{
 get_data_filename(data_date, data_cycle, data_source = "operational meps",
-  experiment_name = NULL, parameter = NULL, lead_time = NULL)
+  experiment_name = NULL, parameter = NULL, lead_time = NULL,
+  members = seq(0, 9), static_path = "", template = "harmoneps_grib")
 }
 \arguments{
 \item{data_date}{The required forecast date. Maybe YYYYMMDD or YYYY-MM-DD or
@@ -14,21 +15,37 @@ any date object.}
 \item{data_cycle}{The forecast cycle. Can be numeric or a string.}
 
 \item{data_source}{If "operational meps" (the default) will find MEPS data.
-Otherwise an experiment is assumed and the path must be given. Not yet
-implemented.}
+Otherwise "expt" must be used and \code{template} should be specified.}
 
-\item{experiment_name}{The experiment name.}
+\item{experiment_name}{The experiment name - can be used in \code{template}.}
 
 \item{parameter}{If the parameter is in a surfex file, for example, it must
 be given so that the correct file is found. Otherwise an extracted file is
 assumed.}
 
-\item{lead_time}{The lead time must be given in hours for experiments.}
+\item{lead_time}{The lead time must be given in hours for NetCDF. If
+\code{template} contains ${LDTx} lead_time must be specified.}
+
+\item{members}{The members to get filenames for if \code{template} contains
+${MBRx}.}
+
+\item{static_path}{The static path for filenames. The full path is assumed to
+be \code{static_path/template}.}
+
+\item{template}{A template for filenames. Standard templates are
+"harmoneps_grib", "harmoneps_grib_fp", "haramoneps_grib_sfx", and the same
+with "harmonie" in place of "harmoneps" for deterministic files. \cr
+Otherwise, a template can be given with substitutions expressed as
+${substitution}. Available substitutions are ${YYYY}, ${MM}, ${DD}, ${HH},
+${LDTx}, ${MBRx}, where x is the number of charcters in the string with
+leading zeros added. YYYY = year (4 digits), MM = month (2 digits with
+leading zero if < 10), DD = day (2 digits with leading zero if < 10), HH =
+hour (2 digits with leading zero if < 10), LDT = lead time, MBR = ensemble
+member. ${static_path} and ${experiment_name} can also be used if
+specified.}
 }
 \value{
-A list containting \code{\strong{fullpath}}, the full path to the
-  file, \code{\strong{filepath}}, the path to the data file and
-  \code{\strong{filename}}, the name of the file.
+The full path(s) to the forecast file(s).
 }
 \description{
 Works for Operational MEPS. For experments, the experiment directory is
@@ -38,6 +55,20 @@ currently hard coded. This needs fixing!
 get_data_filename(20180101, 0)
 get_data_filename(20180101, 0, parameter = "SST")
 get_data_filename("2018-01-01", "06")
-get_data_filename(20180101, 0, data_source = "experiment", experiment_name = "my_exp", lead_time = 24)
+
+my_static_path <- "/lustre/storeB/users/andrewts/surfacePerturbations/grib"
+my_expt <- "MEPS_summer2017_sfcPertRef"
+my_template <- file.path(
+  "${YYYY}${MM}${DD}${HH}",
+  "${experiment_name}",
+  "mbr${MBR3}/fc${YYYY}${MM}${DD}${HH}+${LDT3}.grib"
+)
+get_data_filename(
+  20170527, 0, data_source = "expt",
+  static_path = my_static_path,
+  experiment_name = my_expt,
+  template = my_template,
+  lead_time = 3, members = seq(0, 10)
+)
 }
 

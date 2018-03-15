@@ -1,6 +1,6 @@
 Package: mepsr
 Title: Utilities for MEPS data
-Version: 0.0.0.9010
+Version: 0.0.0.9011
 Authors@R: person("Andrew", "Singleton", email = "andrewts@met.no", 
   role = c("aut", "cre"))
 Description: Utilities for working with data including functions to find and 
@@ -16,6 +16,8 @@ Imports:
     ncdf4,
     tools,
     stringr,
+    readr,
+    purrr,
     lubridate,
     magrittr,
     dplyr,

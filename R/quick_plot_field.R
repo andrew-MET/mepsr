@@ -20,7 +20,7 @@
 #'
 #' @examples
 #' my_file <- get_data_filename(20180101, 0)
-#' t2m <- read_members(my_file$filepath, my_file$filename, 9, "T2m", lead_time = 0)
+#' t2m <- read_members(my_file, "T2m", lead_time = 0)
 #' quick_plot_field(t2m, 0)
 #'
 #' breaks <- c(-50, -40, - 30, seq(-20, 15, 5))

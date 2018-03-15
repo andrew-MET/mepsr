@@ -4,18 +4,21 @@
 \alias{read_members}
 \title{Read ensemble members from a forecast file}
 \usage{
-read_members(filepath, filename, num_perturbed_members, parameter,
-  file_type = NULL, lead_time = NULL, ...)
+read_members(model_files, parameter, members = seq(0, 9), file_type = NULL,
+  lead_time = NULL, ...)
 }
 \arguments{
-\item{filepath}{The path to the forecast file.}
-
-\item{filename}{The forecast file name.}
-
-\item{num_perturbed_members}{The number of perturbed members in the forecast.
-Note that this does not include the control member.}
+\item{model_files}{Files to read. For NetCDF only 1 file is expected, but for
+grib a vector of files can be passed. The character string 'mbr' must be
+somewhere in the paths for the member numbes to be identified. It is
+assumed that grib files only contain one member. For grib2 (yet to be
+implemented) this might not be the case.}
 
 \item{parameter}{The parameter to read.}
+
+\item{members}{A vector of numbers identifying the members to read. This is
+ignored for grib files as it is assumed that the members were already
+decided when the filenames were obtained.}
 
 \item{file_type}{The forecast file format. The function can attempt to
 ascertain the format from the file name, but if it can't \code{file_type}
@@ -26,13 +29,13 @@ must be passed as an argument.}
 \item{...}{Arguments to be passed to \code{read_netcf} or \code{read_grib}}
 }
 \value{
-A list containing: \cr
-\code{\strong{model_data}}: The 3d field (the 3rd dimension is ensemble member). \cr
-\code{\strong{x}}: The x coordinates in the projection of the forecast file. \cr
-\code{\strong{y}}: The y coordinates in the projection of the forecast file. \cr
-\code{\strong{proj4_string}}: The proj4 projection string for the forecast file. \cr
-\code{\strong{parameter}}: The parameter that the 3d field represents. \cr
-\code{\strong{filename}}: The full path to the forecast file.
+A list containing: \cr \code{model_data}: The 3d field (the 3rd
+  dimension is ensemble member). \cr \code{x}: The x coordinates in
+  the projection of the forecast file. \cr \code{y}: The y coordinates
+  in the projection of the forecast file. \cr \code{proj4_string}: The
+  proj4 projection string for the forecast file. \cr \code{parameter}:
+  The parameter that the 3d field represents. \cr \code{filename}: The
+  full path to the forecast files.
 }
 \description{
 \code{read_members} reads all esemble members from a forecast file for a
@@ -41,9 +44,24 @@ helper functions. It is assumed that grib files only contain one member and
 ntcdf files contain all members.
 }
 \examples{
-file_path <- "/lustre/storeB/immutable/archive/projects/metproduction/MEPS/2018/01/01"
-file_name <- "meps_extracted_2_5km_20180101T00Z.nc"
-model_field <- read_members(file_path, file_name, 9, "precipitation_amount_acc", lead_time = 24)
-model_field <- read_members(file_path, file_name, 9, "Pcp", lead_time = 24)
+fname <- get_data_filename(20170801, 0)
+model_field <- read_members(fname, "precipitation_amount_acc", lead_time = 24)
+model_field <- read_members(fname, "Pcp", members = c(2, 4, 6), lead_time = 24)
+
+my_static_path <- "/lustre/storeB/users/andrewts/surfacePerturbations/grib"
+my_expt <- "MEPS_summer2017_sfcPertRef"
+my_template <- file.path(
+  "${YYYY}${MM}${DD}${HH}",
+  "${experiment_name}",
+  "mbr${MBR3}/fc${YYYY}${MM}${DD}${HH}+${LDT3}.grib"
+)
+fname <- get_data_filename(
+  20170527, 0, data_source = "expt",
+  static_path = my_static_path,
+  experiment_name = my_expt,
+  template = my_template,
+  lead_time = 3, members = seq(0, 10)
+)
+model_field <- read_members(fname, "fog")
 }
 
