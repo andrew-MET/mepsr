@@ -8,12 +8,16 @@
 #' @importFrom graphics lines
 #'
 #' @param eps_field Output of \code{read_members}.
-#' @param member Member to plot. Can be numeric or one of "mean", "sd", or "all".
+#' @param member Member to plot. Can be numeric or one of "mean", "sd", or
+#'   "all".
 #' @param legend Whether to plot a legend - TRUE or FALSE. Defaults to TRUE.
 #' @param hires_coast Plot a high resolution coastline - TRUE or FALSE. Defaults
 #'   to FALSE.
 #' @param ... Arguments for \code{image.plot}, e.g. for breaks and colour
 #'   palette.
+#' @param col Colour palette, i.e. a vector of colours. If breaks are specified
+#'   there must be fewer colours than breaks.
+#' @param num_rows Number of rows in a multi member plot.
 #'
 #' @return A plot
 #' @export
@@ -30,18 +34,21 @@
 #'
 #' library(viridis)
 #' quick_plot_field(t2m, 0, hires = TRUE, col = viridis(256))
-
+#'
+#' quick_plot_field(t2m, "all", legend = FALSE, num_rows = 2, col = viridis(256))
+#'
 quick_plot_field <- function(
   eps_field,
   member,
   legend = TRUE,
   hires_coast = FALSE,
   col = fields::tim.colors(),
+  num_rows = NULL,
   ...
 ) {
 
   if (is.numeric(member)) {
-    member_index <- which(eps_field$member == member)
+    member_index <- which(eps_field$member %in% member)
     if (length(member_index) == 0) {
       stop("Member ", member, " not found")
     } else {
@@ -72,13 +79,18 @@ quick_plot_field <- function(
   num_panels <- 1
   if (length(dim(plot_field)) == 3) {
     num_panels <- dim(plot_field)[3]
-    plot_cols <- num_panels %>%
-      sqrt() %>%
-      ceiling()
-    plot_rows <- plot_cols - 1
-    if (plot_cols * plot_rows < num_panels) plot_rows <- plot_cols
+    if (is.null(num_rows)) {
+      plot_cols <- num_panels %>%
+        sqrt() %>%
+        ceiling()
+      plot_rows <- plot_cols - 1
+      if (plot_cols * plot_rows < num_panels) plot_rows <- plot_cols
+    } else{
+      plot_rows <- num_rows
+      plot_cols <- ceiling(num_panels / num_rows)
+    }
   }
-  panel_layout <- t(matrix(seq(1, plot_cols * plot_rows), ncol = plot_cols, nrow = plot_rows))
+  panel_layout <- t(matrix(seq(1, plot_cols * plot_rows), ncol = plot_rows, nrow = plot_cols))
   layout(panel_layout)
   par(mar = c(1, 1, 1, 1))
   plot_fun <- ifelse (legend, fields::image.plot, image)

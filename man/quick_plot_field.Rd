@@ -5,17 +5,23 @@
 \title{Plot a field from an eps model}
 \usage{
 quick_plot_field(eps_field, member, legend = TRUE, hires_coast = FALSE,
-  col = fields::tim.colors(), ...)
+  col = fields::tim.colors(), num_rows = NULL, ...)
 }
 \arguments{
 \item{eps_field}{Output of \code{read_members}.}
 
-\item{member}{Member to plot. Can be numeric or one of "mean", "sd".}
+\item{member}{Member to plot. Can be numeric or one of "mean", "sd", or
+"all".}
 
 \item{legend}{Whether to plot a legend - TRUE or FALSE. Defaults to TRUE.}
 
 \item{hires_coast}{Plot a high resolution coastline - TRUE or FALSE. Defaults
 to FALSE.}
+
+\item{col}{Colour palette, i.e. a vector of colours. If breaks are specified
+there must be fewer colours than breaks.}
+
+\item{num_rows}{Number of rows in a multi member plot.}
 
 \item{...}{Arguments for \code{image.plot}, e.g. for breaks and colour
 palette.}
@@ -39,5 +45,8 @@ quick_plot_field(t2m, 0, col = colours, breaks = breaks, lab.breaks = breaks)
 
 library(viridis)
 quick_plot_field(t2m, 0, hires = TRUE, col = viridis(256))
+
+quick_plot_field(t2m, "all", legend = FALSE, num_rows = 2, col = viridis(256))
+
 }
 

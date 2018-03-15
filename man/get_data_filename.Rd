@@ -24,7 +24,7 @@ be given so that the correct file is found. Otherwise an extracted file is
 assumed.}
 
 \item{lead_time}{The lead time must be given in hours for NetCDF. If
-\code{template} contains ${LDTx} lead_time must be specified.}
+\code{template} contains ${LDTx} `lead_time` must be specified.}
 
 \item{members}{The members to get filenames for if \code{template} contains
 ${MBRx}.}
@@ -36,7 +36,7 @@ be \code{static_path/template}.}
 "harmoneps_grib", "harmoneps_grib_fp", "haramoneps_grib_sfx", and the same
 with "harmonie" in place of "harmoneps" for deterministic files. \cr
 Otherwise, a template can be given with substitutions expressed as
-${substitution}. Available substitutions are ${YYYY}, ${MM}, ${DD}, ${HH},
+${substitution}. Available substitutions are \code{${YYYY}}, ${MM}, ${DD}, ${HH},
 ${LDTx}, ${MBRx}, where x is the number of charcters in the string with
 leading zeros added. YYYY = year (4 digits), MM = month (2 digits with
 leading zero if < 10), DD = day (2 digits with leading zero if < 10), HH =
