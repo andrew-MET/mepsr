@@ -99,15 +99,19 @@ read_members <- function(model_files,
 	    "+", paste(
 	      geogrid::proj4.list2str(attr(geofield_data, "domain")$projection), collapse = " +"
       )
-	  )
+	  ) %>%
+	    stringr::str_replace("latlong", "longlat")
 	  proj4_string <- proj4_string %>%
 	    stringr::str_replace_all(" = ", "=") %>%
 	    stringr::str_replace_all(" =", "=") %>%
 	    stringr::str_replace_all("= ", "=")
-	  members <- model_files %>%
-	    strsplit("/") %>%
-	    purrr::map(~ stringr::str_subset(., "mbr")) %>%
-	    purrr::map_dbl(readr::parse_number)
+	  members <- ifelse(length(model_files) > 1,
+	    model_files %>%
+	      strsplit("/") %>%
+	      purrr::map(~ stringr::str_subset(., "mbr")) %>%
+	      purrr::map_dbl(readr::parse_number),
+	    0
+	  )
 
 	  data_all        <- array(NA, c(dim(geofield_data), num_perturbed_members + 1))
 	  data_all[, , 1] <- geofield_data
@@ -149,8 +153,8 @@ read_members <- function(model_files,
 #
 # Get perturbed members
 #
-	pb <- utils::txtProgressBar(min = 1, max = num_perturbed_members, initial = 1, style = 3)
 	if (num_perturbed_members > 0) {
+	  pb <- utils::txtProgressBar(min = 1, max = num_perturbed_members, initial = 1, style = 3)
 	  for (member in 1:num_perturbed_members) {
   	  member_name <- paste0("mbr", formatC(member, width = 3, flag = "0"))
   	  if (file_type == "grib") {
