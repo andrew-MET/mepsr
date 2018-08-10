@@ -127,8 +127,8 @@ read_members <- function(model_files,
 		if (is.null(lead_time)) stop("lead_time must be supplied for NetCDF data")
 		model_file      <- model_files[1]
 		ncID            <- ncdf4::nc_open(model_file)
-		x               <- ncdf4::ncvar_get(ncID, "x")
-		y               <- ncdf4::ncvar_get(ncID, "y")
+		x               <- round(ncdf4::ncvar_get(ncID, "x"))
+		y               <- round(ncdf4::ncvar_get(ncID, "y"))
 		proj4_string    <- ncdf4::ncatt_get(ncID, "projection_lambert", "proj4")$value
 		num_members     <- length(members)
 		nc_members      <- ncdf4::ncvar_get(ncID, "ensemble_member")
@@ -144,6 +144,38 @@ read_members <- function(model_files,
 		num_perturbed_members <- num_members - 1
 		data_all        <- array(NA, c(length(x), length(y), num_perturbed_members + 1))
 		data_all[, , 1] <- read_netcdf(model_file, parameter, members[1], lead_time, ...)
+#
+	} else if (tolower(file_type) == "netcdf_ec") {
+#
+		if (!requireNamespace("ncdf4", quietly = TRUE)) {
+			stop("Package ncdf4 required for read_members() - Please install from CRAN",
+				call. = FALSE
+			)
+		}
+#
+		if (is.null(lead_time)) stop("lead_time must be supplied for NetCDF data")
+		model_file      <- model_files[1]
+		ncID            <- ncdf4::nc_open(model_file)
+		x               <- ncdf4::ncvar_get(ncID, "longitude")
+		y               <- rev(ncdf4::ncvar_get(ncID, "latitude"))
+		proj4_string    <- ncdf4::ncatt_get(ncID, "projection_regular_ll", "proj4")$value
+		num_members     <- length(members)
+		nc_members      <- ncdf4::ncvar_get(ncID, "ensemble_member")
+	  nc_units        <- ncdf4::ncatt_get(ncID, "precipitation_amount_acc", "units")$value
+	  multiplier      <- ifelse(nc_units == "Mg/m^2", 1000, 1)
+		ncdf4::nc_close(ncID)
+		if (num_members > length(nc_members)) {
+			cat("\nWARNING: Number of members in file   =", length(nc_members))
+			cat("\n         Number of members requested =", num_members)
+			cat("\n         All members will be read from the file")
+			cat("\n")
+			members     <- nc_members
+			num_members <- length(members)
+		}
+		num_perturbed_members <- num_members - 1
+		data_all        <- array(NA, c(length(x), length(y), num_perturbed_members + 1))
+		data_all[, , 1] <- read_netcdf(model_file, parameter, members[1], lead_time, ...)
+		data_all[, , 1] <- data_all[, dim(data_all)[2]:1, 1]
 #
 	} else {
 		stop("Unknown file type: ", file_type, ". Can only deal with netcdf or grib",
@@ -161,7 +193,11 @@ read_members <- function(model_files,
   			model_file               <- model_files[member + 1]
   		  data_all[, , member + 1] <- read_grib(model_file, parameter)
   	  } else if (file_type == "netcdf") {
-  		  data_all[, , member + 1] <- read_netcdf(model_file, parameter, members[member], lead_time, ...)
+  		  data_all[, , member + 1] <- read_netcdf(model_file, parameter, members[member + 1], lead_time, ...)
+  		  if (file_type == "netcdf_ec") data_all[, , member + 1] <- data_all[, dim(data_all)[2]:1, member + 1]
+  	  } else if (file_type == "netcdf_ec") {
+  		  data_all[, , member + 1] <- read_netcdf(model_file, parameter, members[member + 1], lead_time, ...)
+  		  data_all[, , member + 1] <- data_all[, dim(data_all)[2]:1, member + 1]
   	  }
   	  utils::setTxtProgressBar(pb, member)
 	  }
@@ -179,6 +215,9 @@ read_members <- function(model_files,
 	is_geopotential <- function(x) {
 	  tolower(x) %in% c("z0m", "z") | stringr::str_detect(x, "geopotential")
 	}
+	is_precip <- function(x) {
+	  tolower(x) %in% c("pcp") | stringr::str_detect(x, "precipitation")
+	}
 
 	if (is_temperature(parameter) & min(data_all, na.rm = TRUE) > 200) {
 		data_all <- data_all - 273.15
@@ -188,6 +227,9 @@ read_members <- function(model_files,
 	}
 	if (is_geopotential(parameter)) {
 		data_all <- data_all/9.80665
+	}
+	if (is_precip(parameter) & file_type == "netcdf_ec") {
+	  data_all <- data_all * multiplier
 	}
 
 #

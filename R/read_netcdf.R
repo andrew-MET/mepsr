@@ -49,7 +49,12 @@ read_netcdf <- function(filename, parameter, member, lead_time, level = NULL) {
   nc_lead_times	  <- ncdf4::ncvar_get(ncID, "time")
   nc_lead_times   <- (nc_lead_times - nc_lead_times[1]) / 3600
   nc_members      <- ncdf4::ncvar_get(ncID, "ensemble_member")
-  nc_pressure     <- ncdf4::ncvar_get(ncID, "pressure")
+  nc_pressure     <- try(ncdf4::ncvar_get(ncID, "pressure"), silent = TRUE)
+  if (inherits(nc_pressure, "try-error")) {
+    print("Trying to read var name: surface")
+    nc_pressure <- ncdf4::ncvar_get(ncID, "surface")
+    if (!inherits(nc_pressure, "try-error")) print("success!")
+  }
 
   lead_time_index <- which(nc_lead_times == lead_time)
   if (length(lead_time_index) == 0) stop("Requested lead time ", lead_time, " not found")

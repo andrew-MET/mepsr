@@ -48,6 +48,20 @@ get_template <- function(template) {
       "${YYYY}","${MM}","${DD}","${HH}",
       "fc${YYYY}${MM}${DD}_${HH}+${LDT3}_grib_sfx"
 		),
+    "ifsens_old" = file.path(
+      "${static_path}",
+      "${YYYY}",
+      "eps25_${YYYY}${MM}${DD}${HH}Z.nc"
+    ),
+    "ifsens" = file.path(
+      "${static_path}",
+      "${YYYY}",
+      "ec_ens_${YYYY}${MM}${DD}T${HH}Z.nc"
+    ),
+    "ifsens_temp" = file.path(
+      "${static_path}",
+      "eps25_${YYYY}${MM}${DD}${HH}Z.nc"
+    ),
     file.path("${static_path}", template)
   )
   template
