@@ -29,6 +29,10 @@ get_grib_param_info <- function(param, level = NULL, levtype = 100) {
 				               param_number <-  61
 				               level_type   <-  105
 				               level_number <-  0},
+				 "pcp_ifs"  = {short_name   <-  "tp"
+				               param_number <-  228
+				               level_type   <-  1
+				               level_number <-  0},
 				 "fog"      = {short_name   <-  "tcc"
 				               param_number <-  71
 				               level_type   <-  109
