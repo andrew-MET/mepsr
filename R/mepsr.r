@@ -1,4 +1,7 @@
 #' @useDynLib mepsr
 #' @importFrom Rcpp evalCpp
 #' @exportPattern "^[[:alpha:]]+"
-NULL
+.onUnload <- function (libpath) {
+  library.dynam.unload("mepsr", libpath)
+}
+
