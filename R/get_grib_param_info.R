@@ -129,6 +129,22 @@ get_grib_param_info <- function(param, level = NULL, levtype = 100) {
 				               param_number <-  247
 				               level_type   <-  1
 				               level_number <-  0},
+				 "ptendu"  = {short_name   <-  "mpww"
+				               param_number <-  103
+				               level_type   <-  109
+				               level_number <-  level},
+				 "ptendv"  = {short_name   <-  "swdir"
+				               param_number <-  104
+				               level_type   <-  109
+				               level_number <-  level},
+				 "ptendt"  = {short_name   <-  "swell"
+				               param_number <-  105
+				               level_type   <-  109
+				               level_number <-  level},
+				 "ptendq"  = {short_name   <-  "swper"
+				               param_number <-  106
+				               level_type   <-  109
+				               level_number <-  level},
 				 "u"        = {short_name   <-  "u"
 				               param_number <-  33
 				               level_type   <-  levtype
@@ -157,6 +173,7 @@ get_grib_param_info <- function(param, level = NULL, levtype = 100) {
 				               param_number <-  52
 				               level_type   <-  levtype
 				               level_number <-  level},
+
 				 "ugust10m" = {short_name   <-  "ugst"
 				               param_number <-  162
 				               level_type   <-  105
