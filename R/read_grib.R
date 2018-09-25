@@ -35,5 +35,10 @@ read_grib <- function(filename, parameter, ...) {
 
   grib_position <- dplyr::pull(grib_position, position)
 
-  drop(simplify2array(lapply(grib_position, function(x) Rgrib2::Gdec(filename, x))))
+  if (length(grib_position) == 1) {
+    Rgrib2::Gdec(filename, grib_position)
+  } else {
+    drop(simplify2array(lapply(grib_position, function(x) Rgrib2::Gdec(filename, x))))
+    # Note: attributes are dropped - see new meteogrid for multidimension meteogrid objects.
+  }
 }
