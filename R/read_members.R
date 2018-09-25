@@ -55,6 +55,7 @@ read_members <- function(model_files,
                          members   = seq(0, 9),
                          file_type = NULL,
                          lead_time = NULL,
+                         progress_bar = TRUE,
                          ...)  {
 #
 # read control and get domain info
@@ -186,7 +187,7 @@ read_members <- function(model_files,
 # Get perturbed members
 #
 	if (num_perturbed_members > 0) {
-	  pb <- utils::txtProgressBar(min = 1, max = num_perturbed_members, initial = 1, style = 3)
+	  if(progress_bar) pb <- utils::txtProgressBar(min = 1, max = num_perturbed_members, initial = 1, style = 3)
 	  for (member in 1:num_perturbed_members) {
   	  member_name <- paste0("mbr", formatC(member, width = 3, flag = "0"))
   	  if (file_type == "grib") {
@@ -199,7 +200,7 @@ read_members <- function(model_files,
   		  data_all[, , member + 1] <- read_netcdf(model_file, parameter, members[member + 1], lead_time, ...)
   		  data_all[, , member + 1] <- data_all[, dim(data_all)[2]:1, member + 1]
   	  }
-  	  utils::setTxtProgressBar(pb, member)
+  	  if(progress_bar) utils::setTxtProgressBar(pb, member)
 	  }
 	}
 #
