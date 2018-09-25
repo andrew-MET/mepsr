@@ -58,7 +58,7 @@ quick_plot_field <- function(
     plot_field <- ens_mean_and_sd(
       eps_field$model_data
     )[[paste0("ens_", tolower(member))]]
-  } else if (tolower(member) == "all") {
+  } else if (tolower(member) %in% c("all", "ensemble_mean", "ensemble_sd")) {
     plot_field <- eps_field$model_data
   } else {
     stop("Unknown option: '", member, "' for member")

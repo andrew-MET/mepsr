@@ -91,7 +91,7 @@ read_members <- function(model_files,
 	  num_perturbed_members <- length(model_files) - 1
 
 	  model_file      <- model_files[1]
-	  geofield_data   <- read_grib(model_file, parameter)
+	  geofield_data   <- read_grib(model_file, parameter, ...)
 	  domain_data     <- meteogrid::DomainExtent(geofield_data)
 	  x               <- seq(domain_data$x0, domain_data$x1, domain_data$dx)
 	  y               <- seq(domain_data$y0, domain_data$y1, domain_data$dy)
@@ -191,7 +191,7 @@ read_members <- function(model_files,
   	  member_name <- paste0("mbr", formatC(member, width = 3, flag = "0"))
   	  if (file_type == "grib") {
   			model_file               <- model_files[member + 1]
-  		  data_all[, , member + 1] <- read_grib(model_file, parameter)
+  		  data_all[, , member + 1] <- read_grib(model_file, parameter, ...)
   	  } else if (file_type == "netcdf") {
   		  data_all[, , member + 1] <- read_netcdf(model_file, parameter, members[member + 1], lead_time, ...)
   		  if (file_type == "netcdf_ec") data_all[, , member + 1] <- data_all[, dim(data_all)[2]:1, member + 1]
