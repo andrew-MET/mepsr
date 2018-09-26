@@ -38,7 +38,28 @@ read_grib <- function(filename, parameter, ...) {
   if (length(grib_position) == 1) {
     Rgrib2::Gdec(filename, grib_position)
   } else {
-    drop(simplify2array(lapply(grib_position, function(x) Rgrib2::Gdec(filename, x))))
-    # Note: attributes are dropped - see new meteogrid for multidimension meteogrid objects.
+    all_levels <- lapply(grib_position, function(x) {cat("."); Rgrib2::Gdec(filename, x)})
+    cat("\n")
+    # Note: attributes are dropped - wait for new meteogrid for multidimension meteogrid objects.
+    # In the meantime return a list with domain information - read_members will only ever ask for one level.
+    domain_data     <- meteogrid::DomainExtent(all_levels[[1]])
+	  x               <- seq(domain_data$x0, domain_data$x1, domain_data$dx)
+	  y               <- seq(domain_data$y0, domain_data$y1, domain_data$dy)
+	  proj4_string    <- paste0(
+	    "+", paste(
+	      meteogrid::proj4.list2str(attr(all_levels[[1]], "domain")$projection), collapse = " +"
+      )
+	  )
+	  list(
+	    model_data   = simplify2array(all_levels),
+	    x            = x,
+	    y            = y,
+	    z            = param_info$level_number,
+	    member       = NA,
+	    proj4_string = proj4_string,
+	    parameter    = parameter,
+	    filename     = filename,
+	    dimensions   = c("x", "y", grib_level_types$description[grib_level_types$id == param_info$level_type])
+	  )
   }
 }
