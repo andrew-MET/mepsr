@@ -15,6 +15,10 @@
 #' model_geofield <- read_grib(file_name, "topo")
 read_grib <- function(filename, parameter, ...) {
 
+  if (!requireNamespace("Rgrib2", quietly = TRUE)) {
+    stop("Rgrib2 must be installed to read grib files")
+  }
+
   param_info    <- get_grib_param_info(parameter, ...)
   if (is.na(param_info$short_name)) {
     stop("Unknown parameter: ", parameter)
