@@ -18,7 +18,7 @@ levels.}
 }
 \value{
 A lisy with \code{short_name}, \code{param_number},
-  \code{level_type}, \code{level_numbe.r}
+  \code{level_type}, \code{level_number}
 }
 \description{
 Gets the shortname and parameter number for a HarmonEPS grib file. For

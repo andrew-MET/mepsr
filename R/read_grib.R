@@ -32,17 +32,27 @@ read_grib <- function(filename, parameter, ...) {
       indicatorOfParameter    ==  param_info$param_number,
       indicatorOfTypeOfLevel  ==  param_info$level_type,
       level                  %in% param_info$level_number
-    )
+    ) %>%
+    dplyr::arrange(.data$level)
   if (length(unique(grib_position$shortName)) > 1) stop("More than one shortName found")
   if (length(unique(grib_position$indicatorOfParameter)) > 1) stop("More than one indicatorOfParameter found")
   if (length(unique(grib_position$indicatorOfTypeOfLevel)) > 1) stop("More than one indicatorOfTypeOfLevel found")
 
-  grib_position <- dplyr::pull(grib_position, position)
+  grib_position <- dplyr::select(grib_position, level, position)
 
-  if (length(grib_position) == 1) {
-    Rgrib2::Gdec(filename, grib_position)
+  if (nrow(grib_position) == 1) {
+    Rgrib2::Gdec(filename, grib_position$position)
   } else {
-    all_levels <- lapply(grib_position, function(x) {cat("."); Rgrib2::Gdec(filename, x)})
+    cat("Reading:", filename, "\n")
+    show_level <- function(.level, num_levels) {
+      cat("Level:", .level, "of", num_levels, "\r")
+      flush.console()
+    }
+    all_levels <- purrr::map2(
+      grib_position$level,
+      grib_position$position,
+      ~{show_level(.x, nrow(grib_position)); Rgrib2::Gdec(filename, .y)}
+    )
     cat("\n")
     # Note: attributes are dropped - wait for new meteogrid for multidimension meteogrid objects.
     # In the meantime return a list with domain information - read_members will only ever ask for one level.
