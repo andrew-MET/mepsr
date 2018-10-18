@@ -6,7 +6,8 @@
 \usage{
 plot_x_section(.fcst_3d, point1, point2, surface_pressure,
   .proj4_string = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
-  topo_color = "grey30", topo_highlight = "grey70", legend = TRUE, ...)
+  topo_color = "grey30", topo_highlight = "grey70", legend = TRUE,
+  pressure_res = 10, horizontal_res = 1, ...)
 }
 \arguments{
 \item{.fcst_3d}{A three dimseninal mepsr type object. Must have z as a named
@@ -29,6 +30,13 @@ pressure in Pa on the same domain as \code{.fcst_3d}.}
 \item{topo_color}{The colour to shade the topogrpahy.}
 
 \item{topo_highlight}{The colour to highlight the top of the topography.}
+
+\item{legend}{Whether to plot a legend (TRUE / FALSE)}
+
+\item{pressure_res}{Vertical resolution of pressure levels in cross section
+(hPa).}
+
+\item{horizontal_res}{Horizontal resolution of cross section (km)}
 
 \item{...}{Arguments to \link[graphics]{image} and \link[fields]{image.plot}.}
 }

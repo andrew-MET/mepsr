@@ -14,6 +14,10 @@
 #' @param .proj4_string The proj4 string for the cross section end points.
 #' @param topo_color The colour to shade the topogrpahy.
 #' @param topo_highlight The colour to highlight the top of the topography.
+#' @param legend Whether to plot a legend (TRUE / FALSE)
+#' @param pressure_res Vertical resolution of pressure levels in cross section
+#'   (hPa).
+#' @param horizontal_res Horizontal resolution of cross section (km)
 #' @param ... Arguments to \link[graphics]{image} and \link[fields]{image.plot}.
 #'
 #' @export
@@ -28,6 +32,8 @@ plot_x_section <- function(
   topo_color     = "grey30",
   topo_highlight = "grey70",
   legend         = TRUE,
+  pressure_res   = 10,
+  horizontal_res = 1,
   ...
 ) {
 
@@ -150,8 +156,8 @@ plot_x_section <- function(
     all_levels$distance,
     all_levels$pressure,
     all_levels$data,
-    xo = seq(min(all_levels$distance), max(all_levels$distance), 2.5),
-    yo = seq(min(all_levels$pressure), max(all_levels$pressure), 1)
+    xo = seq(min(all_levels$distance), max(all_levels$distance), horizontal_res),
+    yo = seq(min(all_levels$pressure), max(all_levels$pressure), pressure_res)
   )
 
 # Construct the polygon for topography, adding a flat line at the bottom to join the ends

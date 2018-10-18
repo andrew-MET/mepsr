@@ -56,12 +56,12 @@ read_netcdf <- function(filename, parameter, member, lead_time, level = NULL) {
     if (!inherits(nc_pressure, "try-error")) print("success!")
   }
 
-  lead_time_index <- which(nc_lead_times == lead_time)
+  lead_time_index <- which(nc_lead_times %in% lead_time)
   if (length(lead_time_index) == 0) stop("Requested lead time ", lead_time, " not found")
-  member_index    <- which(nc_members == member)
+  member_index    <- which(nc_members %in% member)
   if (length(member_index) == 0) stop("Requested member ", member, " not found")
   if (!is.null(level)) {
-    level_index   <- which(nc_pressure == level)
+    level_index   <- which(nc_pressure %in% level)
     if(length(level_index) == 0) stop("Requested pressure level ", level, "not found")
   } else {
     level_index   <- 1
