@@ -92,7 +92,7 @@ quick_plot_field <- function(
   }
   panel_layout <- t(matrix(seq(1, plot_cols * plot_rows), ncol = plot_rows, nrow = plot_cols))
   layout(panel_layout)
-  par(mar = c(1, 1, 1, 1))
+  par(mai = c(0, 0.2, 0.01, 1))
   plot_fun <- ifelse (legend, fields::image.plot, image)
   for (plot_panel in seq(1, num_panels)) {
     if (num_panels == 1) {
