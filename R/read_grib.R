@@ -1,6 +1,5 @@
 #' Read a field from a grib file
 #'
-#' @importFrom Rgrib2 Gopen Gdec
 #' @param filename The grib file name.
 #' @param parameter The parameter to read. Standard HARP names are used.
 #' @param ... Arguments for \code{get_grib_param_info} for level and levtype.
