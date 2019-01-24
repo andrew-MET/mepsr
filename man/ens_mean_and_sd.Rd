@@ -21,4 +21,3 @@ my_file <- get_data_filename(20180101, 0)
 t2m <- read_members(my_file, "T2m", lead_time = 0)
 my_mean_and_sd <- ens_mean_and_sd(t2m$model_data)
 }
-

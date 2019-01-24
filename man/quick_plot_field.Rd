@@ -5,7 +5,8 @@
 \title{Plot a field from an eps model}
 \usage{
 quick_plot_field(eps_field, member, legend = TRUE, hires_coast = FALSE,
-  col = fields::tim.colors(), num_rows = NULL, ...)
+  col = fields::tim.colors(), num_rows = NULL, diff = FALSE,
+  land_colour = "transparent", ...)
 }
 \arguments{
 \item{eps_field}{Output of \code{read_members}.}
@@ -22,6 +23,12 @@ to FALSE.}
 there must be fewer colours than breaks.}
 
 \item{num_rows}{Number of rows in a multi member plot.}
+
+\item{diff}{Whether to plot the difference between 2 members. TRUE or FALSE.
+Only works if exactly 2 members are specified in the \code{member}
+argument.}
+
+\item{land_colour}{Fill colour for land in the plot. Default is transparent.}
 
 \item{...}{Arguments for \code{image.plot}, e.g. for breaks and colour
 palette.}
@@ -49,4 +56,3 @@ quick_plot_field(t2m, 0, hires = TRUE, col = viridis(256))
 quick_plot_field(t2m, "all", legend = FALSE, num_rows = 2, col = viridis(256))
 
 }
-

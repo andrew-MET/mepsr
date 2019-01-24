@@ -18,6 +18,10 @@
 #' @param col Colour palette, i.e. a vector of colours. If breaks are specified
 #'   there must be fewer colours than breaks.
 #' @param num_rows Number of rows in a multi member plot.
+#' @param diff Whether to plot the difference between 2 members. TRUE or FALSE.
+#'   Only works if exactly 2 members are specified in the \code{member}
+#'   argument.
+#' @param land_colour Fill colour for land in the plot. Default is transparent.
 #'
 #' @return A plot
 #' @export
@@ -44,6 +48,8 @@ quick_plot_field <- function(
   hires_coast = FALSE,
   col = fields::tim.colors(),
   num_rows = NULL,
+  diff = FALSE,
+  land_colour = "transparent",
   ...
 ) {
 
@@ -52,7 +58,11 @@ quick_plot_field <- function(
     if (length(member_index) == 0) {
       stop("Member ", member, " not found")
     } else {
-      plot_field <- eps_field$model_data[ , , member_index]
+      if (length(member) == 2 && diff) {
+        plot_field <- eps_field$model_data[, , member_index[1]] - eps_field$model_data[, , member_index[2]]
+      } else {
+        plot_field <- eps_field$model_data[ , , member_index]
+      }
     }
   } else if (tolower(member) %in% c("mean", "sd")) {
     plot_field <- ens_mean_and_sd(
@@ -113,7 +123,7 @@ quick_plot_field <- function(
       col  = col,
       ...
     )
-    sp::plot(countries_polygon, add = TRUE)
+    sp::plot(countries_polygon, add = TRUE, col = land_colour)
     graphics::lines(
       c(x_range[1], x_range[2], x_range[2], x_range[1], x_range[1]),
       c(y_range[1], y_range[1], y_range[2], y_range[2], y_range[1])

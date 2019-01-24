@@ -4,8 +4,8 @@
 \alias{read_members}
 \title{Read ensemble members from a forecast file}
 \usage{
-read_members(model_files, parameter, members = seq(0, 9), file_type = NULL,
-  lead_time = NULL, progress_bar = TRUE, ...)
+read_members(model_files, parameter, members = seq(0, 9),
+  file_type = NULL, lead_time = NULL, progress_bar = TRUE, ...)
 }
 \arguments{
 \item{model_files}{Files to read. For NetCDF only 1 file is expected, but for
@@ -64,4 +64,3 @@ fname <- get_data_filename(
 )
 model_field <- read_members(fname, "fog")
 }
-

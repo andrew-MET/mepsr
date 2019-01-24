@@ -25,4 +25,3 @@ model_geofield <- read_grib(file_name, "t2m")
 model_geofield <- read_grib(file_name, "t", level = 500)
 model_geofield <- read_grib(file_name, "topo")
 }
-

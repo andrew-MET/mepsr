@@ -20,59 +20,60 @@
 #' model_field <- read_netcdf(file_name, "air_temperature_2m", 0, 0)
 #' model_field <- read_netcdf(file_name, "T2m", 0, 0)
 #'
-read_netcdf <- function(filename, parameter, member, lead_time, level = NULL) {
-#
-	if (!requireNamespace("ncdf4", quietly = TRUE)) {
-		stop("Package ncdf4 required for read_netcdf() - Please install from CRAN",
-		call. = FALSE
-		)
-	}
-#
-	if (!requireNamespace("stringr", quietly = TRUE)) {
-		stop("Package stringr required for read_netcdf() - Please install from CRAN",
-		call. = FALSE
-		)
-	}
-#
-	ncID      <- ncdf4::nc_open(filename)
+read_netcdf <- function(filename, parameter, member, lead_time, level = NULL, oper_sfx = FALSE) {
+  #
+  if (!requireNamespace("ncdf4", quietly = TRUE)) {
+    stop("Package ncdf4 required for read_netcdf() - Please install from CRAN",
+      call. = FALSE
+    )
+  }
+  #
+  if (!requireNamespace("stringr", quietly = TRUE)) {
+    stop("Package stringr required for read_netcdf() - Please install from CRAN",
+      call. = FALSE
+    )
+  }
+  #
+  ncID      <- ncdf4::nc_open(filename)
   nc_fields <- names(ncID$var)
   if (parameter %in% nc_fields) {
     nc_param <- parameter
   } else {
-	  nc_param  <- get_netcdf_param_MET(parameter)
+    nc_param  <- get_netcdf_param_MET(parameter)
   }
-	if (is.na(nc_param)) stop("Requested parameter ", parameter, " is unknown")
+  if (is.na(nc_param)) stop("Requested parameter ", parameter, " is unknown")
   if (stringr::str_detect(nc_param, "_pl") && is.null(level)) {
     stop("Pressure level must be supplied for ", parameter, "with e.g. level = 1000")
   }
-#
+  #
   nc_lead_times	  <- ncdf4::ncvar_get(ncID, "time")
   nc_lead_times   <- (nc_lead_times - nc_lead_times[1]) / 3600
   nc_members      <- ncdf4::ncvar_get(ncID, "ensemble_member")
-  nc_pressure     <- try(ncdf4::ncvar_get(ncID, "pressure"), silent = TRUE)
-  if (inherits(nc_pressure, "try-error")) {
-    print("Trying to read var name: surface")
-    nc_pressure <- ncdf4::ncvar_get(ncID, "surface")
-    if (!inherits(nc_pressure, "try-error")) print("success!")
-  }
 
   lead_time_index <- which(nc_lead_times %in% lead_time)
   if (length(lead_time_index) == 0) stop("Requested lead time ", lead_time, " not found")
   member_index    <- which(nc_members %in% member)
   if (length(member_index) == 0) stop("Requested member ", member, " not found")
   if (!is.null(level)) {
+    nc_pressure     <- try(ncdf4::ncvar_get(ncID, "pressure"), silent = TRUE)
+    if (inherits(nc_pressure, "try-error")) {
+      print("Trying to read var name: surface")
+      nc_pressure <- ncdf4::ncvar_get(ncID, "surface")
+      if (!inherits(nc_pressure, "try-error")) print("success!")
+    }
+
     level_index   <- which(nc_pressure %in% level)
     if(length(level_index) == 0) stop("Requested pressure level ", level, "not found")
   } else {
     level_index   <- 1
   }
-#
-  if (stringr::str_detect(filename, "sfx")) {
-  	nc_start <- c(1, 1, member_index, lead_time_index)
-  	nc_count <- c(-1, -1, 1, 1)
+  #
+  if (oper_sfx) {
+    nc_start <- c(1, 1, member_index, lead_time_index)
+    nc_count <- c(-1, -1, 1, 1)
   } else {
-  	nc_start <- c(1, 1, member_index, level_index, lead_time_index)
-  	nc_count <- c(-1, -1, 1, 1, 1)
+    nc_start <- c(1, 1, member_index, level_index, lead_time_index)
+    nc_count <- c(-1, -1, 1, 1, 1)
   }
   nc_data <- ncdf4::ncvar_get(ncID, nc_param, start = nc_start, count = nc_count)
   ncdf4::nc_close(ncID)

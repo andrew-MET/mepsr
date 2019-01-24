@@ -4,7 +4,8 @@
 \alias{read_netcdf}
 \title{Read a 2d field from NetCDF file.}
 \usage{
-read_netcdf(filename, parameter, member, lead_time, level = NULL)
+read_netcdf(filename, parameter, member, lead_time, level = NULL,
+  oper_sfx = FALSE)
 }
 \arguments{
 \item{filename}{NetCDF file name to read from.}
@@ -32,4 +33,3 @@ model_field <- read_netcdf(file_name, "air_temperature_2m", 0, 0)
 model_field <- read_netcdf(file_name, "T2m", 0, 0)
 
 }
-

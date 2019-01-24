@@ -43,4 +43,3 @@ pressure in Pa on the same domain as \code{.fcst_3d}.}
 \description{
 Plot a vertical cross section of a three dimensional field
 }
-

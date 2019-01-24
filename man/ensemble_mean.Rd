@@ -16,4 +16,3 @@ a list with the same format as the input but the \code{model_data}
 \description{
 Compute the ensemble mean of a 2d field
 }
-

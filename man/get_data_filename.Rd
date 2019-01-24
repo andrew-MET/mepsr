@@ -5,9 +5,10 @@
 \title{Gets the filename of a forecast file from the date, cycle and lead time. A
 template can be passed as an argument.}
 \usage{
-get_data_filename(data_date, data_cycle, data_source = "operational meps",
-  experiment_name = NULL, parameter = NULL, lead_time = NULL,
-  members = seq(0, 9), static_path = "", template = "harmoneps_grib")
+get_data_filename(data_date, data_cycle,
+  data_source = "operational meps", experiment_name = NULL,
+  parameter = NULL, lead_time = NULL, members = seq(0, 9),
+  static_path = "", template = "harmoneps_grib")
 }
 \arguments{
 \item{data_date}{The required forecast date. Maybe YYYYMMDD or YYYY-MM-DD or
@@ -72,4 +73,3 @@ get_data_filename(
   lead_time = 3, members = seq(0, 10)
 )
 }
-
