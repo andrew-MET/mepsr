@@ -59,7 +59,8 @@ quick_plot_field <- function(
       stop("Member ", member, " not found")
     } else {
       if (length(member) == 2 && diff) {
-        plot_field <- eps_field$model_data[, , member_index[1]] - eps_field$model_data[, , member_index[2]]
+        ordered_index <- member_index[order(member)]
+        plot_field <- eps_field$model_data[, , ordered_index[1]] - eps_field$model_data[, , ordered_index[2]]
       } else {
         plot_field <- eps_field$model_data[ , , member_index]
       }
